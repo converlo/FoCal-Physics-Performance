@@ -1,0 +1,12 @@
+#                     N   MinRadius[rings]  MaxRadius[cm]  SeedTreshold[keV]  ClusterTreshold[keV]   NCellsThreshold  Seed/Total Th   Weight1  Weight2 Weight3 Rejection   Rejection2 Calib.Const1  Calib.Const2  Calib.Const3                              
+FILE_FORMAT_VERSION 2
+  PARAMETERS_SEGMENT_N0        2              5                  0                  5000               2.0               0.3           0.00837 0.307   1.52      15.0           0       6900.           0.         0.000e+00
+  PARAMETERS_SEGMENT_N1        2              4                  5                     7               6.0               0.0           0.00894 0.0929  0.488     5.0            0       5.0          -1.0e-3       0.0    
+  PARAMETERS_SEGMENT_N2        2              5                  3500              10000               3.0               0.3           0.00625 0.360   1.36      15.0           0       0               0          0
+  PARAMETERS_SEGMENT_N3        2              4                  5                    10                10               0.0           0.0266  0.148   0.520     5.0            0       0               0          0 
+  PARAMETERS_SEGMENT_N4        2              5                  3500              15000                 6               0.25          0.017   0.448   1.50      15.0           0       0               0          0
+  PARAMETERS_SEGMENT_N5        2              5                  3000               8500               5.0               0.20          0.0545  0.605   2.14      15.0           0       0               0          0 
+# segment 6 is HCAL; parameters are mostly dummy (avoid crash)
+  PARAMETERS_SEGMENT_N6        2              5                  0                  5000               2.0               0.3           0.00837 0.307   1.52      10.0           0       7800.           0.         0.000e+00
+#EOF
+

@@ -1,0 +1,3 @@
+[submodule "focalJetAnalysis"]
+	path = focalJetAnalysis
+	url = https://github.com/lmhuhta/focalJetAnalysis.git
