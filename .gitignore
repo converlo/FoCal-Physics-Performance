@@ -25,3 +25,5 @@ simtest/validation_error.message
 !simtest/analysisJets.root
 !simtest/focalClusters.root
 focalJetAnalysis/.git
+.ssh/
+.gitconfig
