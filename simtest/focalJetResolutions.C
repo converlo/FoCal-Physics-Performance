@@ -26,8 +26,8 @@ double textSize = 0.05; // 5;
 // Base macro provided to me by F. Bock
 
 void focalJetResolutions(
-    TString inputfileR02 = "Data20230816/JES/EneMerged_OutputR6_pT_0Mass.root",
-    TString inputfileR04 = "Data20230816/JES/EneMerged_OutputR6_pT_0Mass.root")
+    TString inputfileR02 = "JetPlottingMerged_R2.root",
+    TString inputfileR04 = "JetPlottingMerged_R4.root")
 {
   StyleSettingsPaper();
   TGaxis::SetMaxDigits(4);

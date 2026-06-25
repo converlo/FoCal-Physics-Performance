@@ -54,13 +54,13 @@ void JetPlottingMergedFile(int Rvalue = 2)
     double EtameansE[nEtaBins - 1][nEBins - 1];
     double EtaSDE[nEtaBins - 1][nEBins - 1];
 
-    TFile *jetFile = TFile::Open(Form("Data20230816/JES/EnMergedR%d_pT_0Mass.root", int(Rvals[Rvalue] * 10)));
+    TFile *jetFile = TFile::Open(Form("analysisJets.root"));
 
     TTree *jetTree = (TTree *)jetFile->Get("jetTree");
     TTree *TruthjetTree = (TTree *)jetFile->Get("truthjetTree");
     // TTree *PDGTree = (TTree *)jetFile->Get("inPDGTree");
 
-    TFile *fout = new TFile(Form("Data20230816/JES/EneMerged_OutputR%d_pT_0Mass.root", int(Rvals[Rvalue] * 10)), "RECREATE");
+    TFile *fout = new TFile(Form("JetPlottingMergedFile_R%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
 
     // histograms
 
