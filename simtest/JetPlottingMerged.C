@@ -121,10 +121,10 @@ void JetPlottingMerged(int Rvalue = 2)
             jetTree->Draw(Form("jetE>>hjetE_%d", iR), Form("jetR==%d && jetEta>=%f && jetEta<%f", int(Rvals[iR] * 10), etaMin + Rvals[iR], etaMax - Rvals[iR]), "goff");
             hjetE[iR]->Scale(normalizations[iNorm] / nFolders[iNorm]);
 
-            jetTree->Draw(Form("jetpT_match>>hTruthjetpT_Matched_%d", iR), Form("jetR==%d && jetEta>3.4+%f && jetEta<5.5-%f && jetEta_match>3.4+%f && jetEta_match<5.5-%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[iR] * 10), Rvals[iR], Rvals[iR], Rvals[iR], Rvals[iR], Rvals[iR] * 0.6, constMin), "goff");
+            jetTree->Draw(Form("jetpT_match>>hTruthjetpT_Matched_%d", iR), Form("jetR==%d && jetEta>3.4+%f && jetEta<5.5-%f && jetEta_match>3.4+%f && jetEta_match<5.5-%f && jet_distmatch<%f", int(Rvals[iR] * 10), Rvals[iR], Rvals[iR], Rvals[iR], Rvals[iR], Rvals[iR] * 0.6, constMin), "goff");
             hTruthjetpT_Matched[iR]->Scale(normalizations[iNorm] / nFolders[iNorm]);
             
-            jetTree->Draw(Form("jetE_match>>hTruthjetE_Matched_%d", iR), Form("jetR==%d && jetEta>3.4+%f && jetEta<5.5-%f && jetEta_match>3.4+%f && jetEta_match<5.5-%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[iR] * 10), Rvals[iR], Rvals[iR], Rvals[iR], Rvals[iR], Rvals[iR] * 0.6, constMin), "goff");
+            jetTree->Draw(Form("jetE_match>>hTruthjetE_Matched_%d", iR), Form("jetR==%d && jetEta>3.4+%f && jetEta<5.5-%f && jetEta_match>3.4+%f && jetEta_match<5.5-%f && jet_distmatch<%f", int(Rvals[iR] * 10), Rvals[iR], Rvals[iR], Rvals[iR], Rvals[iR], Rvals[iR] * 0.6, constMin), "goff");
             hTruthjetE_Matched[iR]->Scale(normalizations[iNorm] / nFolders[iNorm]);
 
             TruthjetTree->Draw(Form("truthjetpT>>hTruthjetpT_%d", iR), Form("truthjetR==%d && truthjetEta>=%f && truthjetEta<%f", int(Rvals[iR] * 10), etaMin + Rvals[iR], etaMax - Rvals[iR]), "goff");
@@ -137,8 +137,8 @@ void JetPlottingMerged(int Rvalue = 2)
         TH2D *hRespMatrix_pT = new TH2D("hRespMatrix_pT", Form("Detector response matrix, R=%0.1f;#it{p}_{T}^{det} (GeV/c);#it{p}_{T}^{part} (GeV/c)", Rvals[Rvalue]), 150, 0, 150, 150, 0, 150);
         TH2D *hRespMatrix_E = new TH2D("hRespMatrix_E", Form("Detector response matrix, R=%0.1f;#it{E}_{jet}^{det} (GeV);#it{E}_{jet}^{part} (GeV)", Rvals[Rvalue]), 2000, 0, 4000, 2000, 0, 4000);
 
-        jetTree->Draw("jetE_match:jetE>>hRespMatrix_E", Form("jetR==%d && jetEta>=%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), etaMin + Rvals[Rvalue], etaMax - Rvals[Rvalue], etaMin + Rvals[Rvalue], etaMax - Rvals[Rvalue], Rvals[Rvalue] * 0.6, constMin), "goff");
-        jetTree->Draw("jetpT_match:jetpT>>hRespMatrix_pT", Form("jetR==%d && jetEta>=%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), etaMin + Rvals[Rvalue], etaMax - Rvals[Rvalue], etaMin + Rvals[Rvalue], etaMax - Rvals[Rvalue], Rvals[Rvalue] * 0.6, constMin), "goff");
+        jetTree->Draw("jetE_match:jetE>>hRespMatrix_E", Form("jetR==%d && jetEta>=%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f", int(Rvals[Rvalue] * 10), etaMin + Rvals[Rvalue], etaMax - Rvals[Rvalue], etaMin + Rvals[Rvalue], etaMax - Rvals[Rvalue], Rvals[Rvalue] * 0.6, constMin), "goff");
+        jetTree->Draw("jetpT_match:jetpT>>hRespMatrix_pT", Form("jetR==%d && jetEta>=%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f", int(Rvals[Rvalue] * 10), etaMin + Rvals[Rvalue], etaMax - Rvals[Rvalue], etaMin + Rvals[Rvalue], etaMax - Rvals[Rvalue], Rvals[Rvalue] * 0.6, constMin), "goff");
 
         hRespMatrix_pT->Scale(normalizations[iNorm] / nFolders[iNorm]);
         hRespMatrix_E->Scale(normalizations[iNorm] / nFolders[iNorm]);
@@ -146,11 +146,11 @@ void JetPlottingMerged(int Rvalue = 2)
         for (int iE = 0; iE < nEtaBins - 1; ++iE) // eta loop
         {
             hRespMatrix_pT_Eta[iE] = new TH2D(Form("hRespMatrix_pT_Eta_%d", iE), Form("Detector response matrix, eta %0.1f - %0.1f, R=%0.1f;#it{p}_{T}^{det} (GeV/c);#it{p}_{T}^{part} (GeV/c)", EtaBinBorders[iE], EtaBinBorders[iE + 1], Rvals[Rvalue]), 150, 0, 150, 150, 0, 150);
-            jetTree->Draw(Form("jetpT_match:jetpT>>hRespMatrix_pT_Eta_%d", iE), Form("jetR==%d && jetEta>=%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), EtaBinBorders[iE], EtaBinBorders[iE + 1], EtaBinBorders[iE], EtaBinBorders[iE + 1], Rvals[Rvalue] * 0.6, constMin), "goff");
+            jetTree->Draw(Form("jetpT_match:jetpT>>hRespMatrix_pT_Eta_%d", iE), Form("jetR==%d && jetEta>=%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f", int(Rvals[Rvalue] * 10), EtaBinBorders[iE], EtaBinBorders[iE + 1], EtaBinBorders[iE], EtaBinBorders[iE + 1], Rvals[Rvalue] * 0.6, constMin), "goff");
             hRespMatrix_pT_Eta[iE]->Scale(normalizations[iNorm] / nFolders[iNorm]);
 
             hRespMatrix_E_Eta[iE] = new TH2D(Form("hRespMatrix_E_Eta_%d", iE), Form("Detector response matrix, eta %0.1f - %0.1f, R=%0.1f;#it{E}_{jet}^{det} (GeV);#it{E}_{jet}^{part} (GeV)", EtaBinBorders[iE], EtaBinBorders[iE + 1], Rvals[Rvalue]), 2000, 0, 4000, 2000, 0, 4000);
-            jetTree->Draw(Form("jetE_match:jetE>>hRespMatrix_E_Eta_%d", iE), Form("jetR==%d && jetEta>=%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), EtaBinBorders[iE], EtaBinBorders[iE + 1], EtaBinBorders[iE], EtaBinBorders[iE + 1], Rvals[Rvalue] * 0.6, constMin), "goff");
+            jetTree->Draw(Form("jetE_match:jetE>>hRespMatrix_E_Eta_%d", iE), Form("jetR==%d && jetEta>=%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f", int(Rvals[Rvalue] * 10), EtaBinBorders[iE], EtaBinBorders[iE + 1], EtaBinBorders[iE], EtaBinBorders[iE + 1], Rvals[Rvalue] * 0.6, constMin), "goff");
             hRespMatrix_E_Eta[iE]->Scale(normalizations[iNorm] / nFolders[iNorm]);
 
             hEtaMedianpT[iE] = new TH1D(Form("hEtaMedianpT_%d", iE), Form("Mean and median of #Deltap_{T} distribution, eta %0.1f - %0.1f, R=%0.1f", EtaBinBorders[iE], EtaBinBorders[iE + 1], Rvals[Rvalue]), nPtBins - 1, JetPtBorders);
@@ -168,7 +168,7 @@ void JetPlottingMerged(int Rvalue = 2)
 
             // Fill deltapt histos, no eta cut
             // Add here filling from
-            jetTree->Draw(Form("(jetpT-jetpT_match)/jetpT_match>>hjetRatiopT_%d", ipt), Form("jetR==%d && jetpT_match>=%d  && jetpT_match<%d  && jetEta>3.4+%f && jetEta<5.5-%f && jetEta_match>3.4+%f && jetEta_match<5.5-%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), int(JetPtBorders[ipt]), int(JetPtBorders[ipt + 1]), Rvals[Rvalue], Rvals[Rvalue], Rvals[Rvalue], Rvals[Rvalue], Rvals[Rvalue] * 0.6, constMin), "goff");
+            jetTree->Draw(Form("(jetpT-jetpT_match)/jetpT_match>>hjetRatiopT_%d", ipt), Form("jetR==%d && jetpT_match>=%d  && jetpT_match<%d  && jetEta>3.4+%f && jetEta<5.5-%f && jetEta_match>3.4+%f && jetEta_match<5.5-%f && jet_distmatch<%f", int(Rvals[Rvalue] * 10), int(JetPtBorders[ipt]), int(JetPtBorders[ipt + 1]), Rvals[Rvalue], Rvals[Rvalue], Rvals[Rvalue], Rvals[Rvalue], Rvals[Rvalue] * 0.6, constMin), "goff");
             // if(hjetRatiopT[ipt]->GetEntries()==0) hjetRatiopT[ipt]->Fill(-2);
             // hjetRatiopT[ipt]->Scale(normalizations[iNorm] / nFolders[iNorm]);
 
@@ -190,7 +190,7 @@ void JetPlottingMerged(int Rvalue = 2)
             for (int iE = 0; iE < nEtaBins - 1; ++iE)
             {
                 hjetRatiopT_Eta[iE][ipt] = new TH1D(Form("hjetRatiopT_Eta_%d_%d", iE, ipt), Form("Jet-by-jet #Deltap_{T} distribution, #eta: %0.1f - %0.1f (det jet), p_{T}: %d - %d GeV/c;(p_{T}^{det}-p_{T}^{part})/p_{T}^{part};probability", EtaBinBorders[iE], EtaBinBorders[iE + 1], int(JetPtBorders[ipt]), int(JetPtBorders[ipt + 1])), 50, -1.0, 1.0);
-                jetTree->Draw(Form("(jetpT-jetpT_match)/jetpT_match>>hjetRatiopT_Eta_%d_%d", iE, ipt), Form("jetR==%d && jetpT_match>=%d && jetpT_match<%d && jetEta>=%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), int(JetPtBorders[ipt]), int(JetPtBorders[ipt + 1]), EtaBinBorders[iE], EtaBinBorders[iE + 1], EtaBinBorders[iE], EtaBinBorders[iE + 1], Rvals[Rvalue] * 0.6, constMin), "goff");
+                jetTree->Draw(Form("(jetpT-jetpT_match)/jetpT_match>>hjetRatiopT_Eta_%d_%d", iE, ipt), Form("jetR==%d && jetpT_match>=%d && jetpT_match<%d && jetEta>=%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f", int(Rvals[Rvalue] * 10), int(JetPtBorders[ipt]), int(JetPtBorders[ipt + 1]), EtaBinBorders[iE], EtaBinBorders[iE + 1], EtaBinBorders[iE], EtaBinBorders[iE + 1], Rvals[Rvalue] * 0.6, constMin), "goff");
                 // if(hjetRatiopT_Eta[iE][ipt]->GetEntries()==0) hjetRatiopT_Eta[iE][ipt]->Fill(-2);
                 // hjetRatiopT_Eta[iE][ipt]->Scale(normalizations[iNorm] / nFolders[iNorm]);
 
@@ -216,7 +216,7 @@ void JetPlottingMerged(int Rvalue = 2)
             hjetRatioE[ipt] = new TH1D(Form("hjetRatioE_%d", ipt), Form("Jet-by-jet #Delta E distribution, E: %d - %d GeV;(E^{det}-E^{part})/E^{part;probability", int(JetEBorders[ipt]), int(JetEBorders[ipt + 1])), 50, -1.0, 1.0);
 
             // Fill deltaE histos, no eta cut
-            jetTree->Draw(Form("(jetE-jetE_match)/jetE_match>>hjetRatioE_%d", ipt), Form("jetR==%d && jetE_match>=%d  && jetE_match<%d  && jetEta>3.4+%f && jetEta<5.5-%f && jetEta_match>3.4+%f && jetEta_match<5.5-%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), int(JetEBorders[ipt]), int(JetEBorders[ipt + 1]), Rvals[Rvalue], Rvals[Rvalue], Rvals[Rvalue], Rvals[Rvalue], Rvals[Rvalue] * 0.6, constMin), "goff");
+            jetTree->Draw(Form("(jetE-jetE_match)/jetE_match>>hjetRatioE_%d", ipt), Form("jetR==%d && jetE_match>=%d  && jetE_match<%d  && jetEta>3.4+%f && jetEta<5.5-%f && jetEta_match>3.4+%f && jetEta_match<5.5-%f && jet_distmatch<%f", int(Rvals[Rvalue] * 10), int(JetEBorders[ipt]), int(JetEBorders[ipt + 1]), Rvals[Rvalue], Rvals[Rvalue], Rvals[Rvalue], Rvals[Rvalue], Rvals[Rvalue] * 0.6, constMin), "goff");
             // if(hjetRatioE[ipt]->GetEntries()==0) hjetRatioE[ipt]->Fill(-2);
             // hjetRatioE[ipt]->Scale(normalizations[iNorm] / nFolders[iNorm]);
 
@@ -237,7 +237,7 @@ void JetPlottingMerged(int Rvalue = 2)
             for (int iE = 0; iE < nEtaBins - 1; ++iE)
             {
                 hjetRatioE_Eta[iE][ipt] = new TH1D(Form("hjetRatioE_Eta_%d_%d", iE, ipt), Form("Jet-by-jet #Delta E distribution, #eta: %0.1f - %0.1f (det jet), E: %d - %d GeV;(E^{det}-E^{part})/E^{part};probability", EtaBinBorders[iE], EtaBinBorders[iE + 1], int(JetEBorders[ipt]), int(JetEBorders[ipt + 1])), 50, -1.0, 1.0);
-                jetTree->Draw(Form("(jetE-jetE_match)/jetE_match>>hjetRatioE_Eta_%d_%d", iE, ipt), Form("jetR==%d && jetE_match>=%d && jetE_match<%d && jetEta>=%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), int(JetEBorders[ipt]), int(JetEBorders[ipt + 1]), EtaBinBorders[iE], EtaBinBorders[iE + 1], EtaBinBorders[iE], EtaBinBorders[iE + 1], Rvals[Rvalue] * 0.6, constMin), "goff");
+                jetTree->Draw(Form("(jetE-jetE_match)/jetE_match>>hjetRatioE_Eta_%d_%d", iE, ipt), Form("jetR==%d && jetE_match>=%d && jetE_match<%d && jetEta>=%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f", int(Rvals[Rvalue] * 10), int(JetEBorders[ipt]), int(JetEBorders[ipt + 1]), EtaBinBorders[iE], EtaBinBorders[iE + 1], EtaBinBorders[iE], EtaBinBorders[iE + 1], Rvals[Rvalue] * 0.6, constMin), "goff");
                 // if(hjetRatioE_Eta[iE][ipt]->GetEntries()==0) hjetRatioE_Eta[iE][ipt]->Fill(-2);
                 // hjetRatioE_Eta[iE][ipt]->Scale(normalizations[iNorm] / nFolders[iNorm]);
 
