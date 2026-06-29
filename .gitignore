@@ -27,3 +27,4 @@ simtest/validation_error.message
 focalJetAnalysis/.git
 .ssh/
 .gitconfig
+.vscode/
