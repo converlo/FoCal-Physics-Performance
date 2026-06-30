@@ -124,6 +124,7 @@ void AnalyzeJetsGrid()
 	Float_t jet_distmatch;
 	Int_t jetR;
 	Int_t ievt;
+	Float_t jetEem, jetEhad;
 
 	TTree *results = new TTree("jetTree", "jets Info Tree");
 	results->Branch("ievt", &ievt, "ievt/I");
@@ -140,6 +141,10 @@ void AnalyzeJetsGrid()
 	results->Branch("jetRap_match", &jetRap_match, "jetRap_match/F");
 	results->Branch("jet_distmatch", &jet_distmatch, "jet_distmatch/F");
 	results->Branch("jetR", &jetR, "jetR/I");
+	results->Branch("jetEem",  &jetEem,  "jetEem/F");
+	results->Branch("jetEhad", &jetEhad, "jetEhad/F");
+
+
 
 	Float_t truthjetE, truthjetpT, truthjetPhi, truthjetEta, truthjetRap;
 	Int_t truthjetR;
@@ -236,6 +241,39 @@ void AnalyzeJetsGrid()
 		bClusters->GetEvent(0);
 
 		std::vector<fastjet::PseudoJet> input_Clusters;
+		std::vector<float> clust_Eem_map;
+	std::vector<float> clust_Ehad_map;
+
+	// FoCal-E clusters
+	for (int iClust = 0; iClust < clustersArray->GetEntries(); iClust++)
+	{
+    	AliFOCALCluster *clust = (AliFOCALCluster *)clustersArray->At(iClust);
+    	TLorentzVector mom;
+    	Float_t vertex[3] = {0.};
+    	GetMomentum(mom, vertex, clust, 0.);
+    	fastjet::PseudoJet pj(mom.Px(), mom.Py(), mom.Pz(), clust->E());
+    	pj.set_user_index(input_Clusters.size());
+    	input_Clusters.push_back(pj);
+    	clust_Eem_map.push_back(clust->E());
+    	clust_Ehad_map.push_back(clust->GetHCALEnergy());
+	}
+
+	// FoCal-H clusters (Segment == 6)
+	for (int iClust = 0; iClust < FullclustersArray->GetEntries(); iClust++)
+	{
+    	AliFOCALCluster *clust = (AliFOCALCluster *)FullclustersArray->At(iClust);
+    	if (clust->Segment() != 6) continue;
+    	if (clust->E() > 6500) { std::cout << "Rejecting fake cluster\n"; continue; }
+    	TLorentzVector mom;
+    	Float_t vertex[3] = {0.};
+    	GetMomentum(mom, vertex, clust, kPiPlusMass);
+    	fastjet::PseudoJet pj(mom.Px(), mom.Py(), mom.Pz(), clust->E());
+    	pj.set_user_index(input_Clusters.size());
+    	input_Clusters.push_back(pj);
+    	clust_Eem_map.push_back(0.);
+    	clust_Ehad_map.push_back(clust->E());
+	}
+
 
 		for (int iClust = 0; iClust < clustersArray->GetEntries(); iClust++)
 		{
@@ -370,6 +408,17 @@ void AnalyzeJetsGrid()
 				jetEta_match = matchedJet->eta();
 				jetRap_match = matchedJet->rap();
 				jet_distmatch = inclusive_jets[i].user_info<JetMatchingParams>().distance1();
+				
+				jetEem  = 0.;
+				jetEhad = 0.;
+				std::vector<fastjet::PseudoJet> constituents = inclusive_jets[i].constituents();
+				for (auto &c : constituents) {
+					int idx = c.user_index();
+    				if (idx >= 0 && idx < (int)clust_Eem_map.size()) {
+        				jetEem  += clust_Eem_map[idx];
+        				jetEhad += clust_Ehad_map[idx];
+    				}
+				}
 
 				results->Fill();
 			}
