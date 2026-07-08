@@ -29,3 +29,5 @@ focalJetAnalysis/.git
 .gitconfig
 .vscode/
 simtest/build/
+simtest/*.pdf
+simtest/*.png
