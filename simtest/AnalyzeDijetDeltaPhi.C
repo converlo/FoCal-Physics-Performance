@@ -11,21 +11,29 @@ using namespace std;
 
 void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
 {
-
-    // Open the input file
+    //==========================================================
+    // Open input file
+    //==========================================================
 
     TFile *file = TFile::Open(filename);
 
-    // JetTree
+    if(!file || file->IsZombie())
+    {
+        cout << "Cannot open " << filename << endl;
+        return;
+    }
 
     TTree *jetTree = (TTree*)file->Get("jetTree");
 
-    if (!jetTree) {
+    if(!jetTree)
+    {
         cout << "jetTree not found." << endl;
         return;
     }
 
-    // Branch
+    //==========================================================
+    // Branches
+    //==========================================================
 
     Int_t ievt;
     Float_t jetpT;
@@ -37,7 +45,9 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
     jetTree->SetBranchAddress("jetPhi",&jetPhi);
     jetTree->SetBranchAddress("jetEta",&jetEta);
 
+    //==========================================================
     // Histogram
+    //==========================================================
 
     TH1D *hDeltaPhi = new TH1D(
         "hDeltaPhi",
@@ -47,7 +57,9 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
         TMath::Pi()
     );
 
-    // Variables describing one event
+    //==========================================================
+    // Variables
+    //==========================================================
 
     vector<float> eventPt;
     vector<float> eventPhi;
@@ -60,32 +72,21 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
 
     Int_t currentEvent = ievt;
 
+    //==========================================================
     // Loop over all jets
+    //==========================================================
 
     for(Long64_t i=0;i<nEntries;i++)
     {
         jetTree->GetEntry(i);
-
-        //------------------------------------------------------
-        // Same event
-        //------------------------------------------------------
 
         if(ievt == currentEvent)
         {
             eventPt.push_back(jetpT);
             eventPhi.push_back(jetPhi);
         }
-
-        //------------------------------------------------------
-        // New event
-        //------------------------------------------------------
-
         else
         {
-            //--------------------------------------------------
-            // Analyse previous event
-            //--------------------------------------------------
-
             if(eventPt.size() >= 2)
             {
                 int leading = -1;
@@ -111,24 +112,28 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
                     }
                 }
 
-                if(leading >=0 && subleading >=0)
+                if(leading >= 0 && subleading >= 0)
                 {
-                    double dphi = fabs(
-                        eventPhi[leading]
-                        -
-                        eventPhi[subleading]
-                    );
+                    double dphi = fabs(eventPhi[leading]-eventPhi[subleading]);
 
                     if(dphi > TMath::Pi())
                         dphi = 2.*TMath::Pi()-dphi;
 
+                    if(currentEvent < 10)
+                    {
+                        cout << "Event " << currentEvent
+                             << "  Njets = " << eventPt.size()
+                             << "  lead pT = " << pt1
+                             << "  sublead pT = " << pt2
+                             << "  phi1 = " << eventPhi[leading]
+                             << "  phi2 = " << eventPhi[subleading]
+                             << "  dphi = " << dphi
+                             << endl;
+                    }
+
                     hDeltaPhi->Fill(dphi);
                 }
             }
-
-            //--------------------------------------------------
-            // Start new event
-            //--------------------------------------------------
 
             eventPt.clear();
             eventPhi.clear();
@@ -141,44 +146,52 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
     }
 
     //==========================================================
-    // Don't forget the last event
+    // Last event
     //==========================================================
 
     if(eventPt.size() >= 2)
     {
-        int leading=-1;
-        int subleading=-1;
+        int leading = -1;
+        int subleading = -1;
 
-        float pt1=-1.;
-        float pt2=-1.;
+        float pt1 = -1.;
+        float pt2 = -1.;
 
         for(unsigned int j=0;j<eventPt.size();j++)
         {
             if(eventPt[j] > pt1)
             {
-                pt2=pt1;
-                subleading=leading;
+                pt2 = pt1;
+                subleading = leading;
 
-                pt1=eventPt[j];
-                leading=j;
+                pt1 = eventPt[j];
+                leading = j;
             }
-            else if(eventPt[j]>pt2)
+            else if(eventPt[j] > pt2)
             {
-                pt2=eventPt[j];
-                subleading=j;
+                pt2 = eventPt[j];
+                subleading = j;
             }
         }
 
-        if(leading>=0 && subleading>=0)
+        if(leading >= 0 && subleading >= 0)
         {
-            double dphi=fabs(
-                eventPhi[leading]
-                -
-                eventPhi[subleading]
-            );
+            double dphi = fabs(eventPhi[leading]-eventPhi[subleading]);
 
-            if(dphi>TMath::Pi())
-                dphi=2.*TMath::Pi()-dphi;
+            if(dphi > TMath::Pi())
+                dphi = 2.*TMath::Pi()-dphi;
+
+            if(currentEvent < 10)
+            {
+                cout << "Event " << currentEvent
+                     << "  Njets = " << eventPt.size()
+                     << "  lead pT = " << pt1
+                     << "  sublead pT = " << pt2
+                     << "  phi1 = " << eventPhi[leading]
+                     << "  phi2 = " << eventPhi[subleading]
+                     << "  dphi = " << dphi
+                     << endl;
+            }
 
             hDeltaPhi->Fill(dphi);
         }
@@ -188,20 +201,8 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
     // Save output
     //==========================================================
 
-
-
     TFile *out = new TFile("DijetDeltaPhi.root","RECREATE");
-
-    if (currentEvent <10){
-        cout << "Event " << currentEvent
-        << "  lead pt = " << pt1
-        << "  sublead pt = " << pt2
-        << "  dphi = " << dphi
-        << endl;
-    }
-
     hDeltaPhi->Write();
-
     out->Close();
 
     //==========================================================
@@ -213,6 +214,8 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
     hDeltaPhi->Draw();
 
     c->SaveAs("DeltaPhi.png");
+    c->SaveAs("DeltaPhi.pdf");
+    c->SaveAs("DeltaPhi.C");
 
     cout << "Done." << endl;
 }
