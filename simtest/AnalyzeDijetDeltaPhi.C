@@ -18,7 +18,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
     TFile *file = TFile::Open(filename);
 
     if(!file || file->IsZombie())
-    {
+    {   
         cout << "Cannot open " << filename << endl;
         return;
     }
@@ -71,10 +71,28 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
 
     cout << "Number of jets = " << nEntries << endl;
 
-    jetTree->GetEntry(0);
 
-    Int_t currentEvent = ievt;
 
+
+    Int_t currentEvent = -1;
+
+    // Cherche le premier événement ayant le rayon demandé
+    for(Long64_t i=0; i<nEntries; i++)
+    {
+        jetTree->GetEntry(i);
+
+        if(jetR == R)
+        {
+            currentEvent = ievt;
+            break;
+        }
+    }
+
+    if(currentEvent < 0)
+    {
+        cout << "No jets found for R = " << R << endl;
+        return;
+    }
     //==========================================================
     // Loop over all jets
     //==========================================================
@@ -83,55 +101,9 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
     {
         jetTree->GetEntry(i);
 
-        if(ievt == currentEvent && jetR == R)
-        {
-            eventPt.push_back(jetpT);
-            eventPhi.push_back(jetPhi);
-        }
-        else
-        {
-            if(eventPt.size() >= 2)
-            {
-                int leading = -1;
-                int subleading = -1;
-
-                float pt1 = -1.;
-                float pt2 = -1.;
-
-                for(unsigned int j=0;j<eventPt.size();j++)
-                {
-                    if(eventPt[j] > pt1)
-                    {
-                        pt2 = pt1;
-                        subleading = leading;
-
-                        pt1 = eventPt[j];
-                        leading = j;
-                    }
-                    else if(eventPt[j] > pt2)
-                    {
-                        pt2 = eventPt[j];
-                        subleading = j;
-                    }
-                }
-
-                if(leading >= 0 && subleading >= 0)
-                {
-                    double dphi = fabs(eventPhi[leading]-eventPhi[subleading]);
-
-                    if(dphi > TMath::Pi())
-                        dphi = 2.*TMath::Pi()-dphi;
-
-                    /*if(currentEvent < 10)
-                    {
-                        cout << "Event " << currentEvent
-                             << "  Njets = " << eventPt.size()
-                             << "  lead pT = " << pt1
-                             << "  sublead pT = " << pt2
-                             << "  phi1 = " << eventPhi[leading]
-                             << "  phi2 = " << eventPhi[subleading]
-                             << "  dphi = " << dphi
-                             << endl;
+        if(jetR != R)
+            continue;
+        if(ievt == currentEvent)
         {
             eventPt.push_back(jetpT);
             eventPhi.push_back(jetPhi);
