@@ -46,7 +46,7 @@ void JetPlottingMerged(int Rvalue = 2)
     {
 
         TFile *jetFile;
-        jetFile = TFile::Open("analysisJets.root");
+        jetFile = TFile::Open("MergedAnalysisJets.root");
 
         TFile *fout;
 	fout = new TFile(Form("JetPlottingMerged_R%d.root",
