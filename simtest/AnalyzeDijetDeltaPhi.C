@@ -201,25 +201,19 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
         }
     }
 
-    //==========================================================
     // Save output
-    //==========================================================
 
     TFile *out = new TFile("DijetDeltaPhi.root","RECREATE");
     hDeltaPhi->Write();
     out->Close();
 
-    //==========================================================
     // Draw
-    //==========================================================
 
     TCanvas *c = new TCanvas("c","DeltaPhi",800,600);
 
     hDeltaPhi->Draw();
 
-    c->SaveAs("DeltaPhi.png");
     c->SaveAs("DeltaPhi.pdf");
-    c->SaveAs("DeltaPhi.C");
 
     cout << "Done." << endl;
 }
