@@ -11,16 +11,12 @@ using namespace std;
 
 void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
 {
-    //==========================================================
-    // Open file
-    //==========================================================
+
+    // Open the input file
 
     TFile *file = TFile::Open(filename);
 
-    if (!file || file->IsZombie()) {
-        cout << "Cannot open file " << filename << endl;
-        return;
-    }
+    // JetTree
 
     TTree *jetTree = (TTree*)file->Get("jetTree");
 
@@ -29,9 +25,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
         return;
     }
 
-    //==========================================================
-    // Branches
-    //==========================================================
+    // Branch
 
     Int_t ievt;
     Float_t jetpT;
@@ -43,9 +37,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
     jetTree->SetBranchAddress("jetPhi",&jetPhi);
     jetTree->SetBranchAddress("jetEta",&jetEta);
 
-    //==========================================================
     // Histogram
-    //==========================================================
 
     TH1D *hDeltaPhi = new TH1D(
         "hDeltaPhi",
@@ -55,9 +47,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
         TMath::Pi()
     );
 
-    //==========================================================
     // Variables describing one event
-    //==========================================================
 
     vector<float> eventPt;
     vector<float> eventPhi;
@@ -70,9 +60,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
 
     Int_t currentEvent = ievt;
 
-    //==========================================================
     // Loop over all jets
-    //==========================================================
 
     for(Long64_t i=0;i<nEntries;i++)
     {
@@ -200,7 +188,17 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root")
     // Save output
     //==========================================================
 
+
+
     TFile *out = new TFile("DijetDeltaPhi.root","RECREATE");
+
+    if (currentEvent <10){
+        cout << "Event " << currentEvent
+        << "  lead pt = " << pt1
+        << "  sublead pt = " << pt2
+        << "  dphi = " << dphi
+        << endl;
+    }
 
     hDeltaPhi->Write();
 
