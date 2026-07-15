@@ -10,7 +10,7 @@
 
 using namespace std;
 
-void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const int R=2)
+void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const int R=2, const int pTcut=10)
 {
     //==========================================================
     // Open input file
@@ -181,7 +181,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
                 {
 
                     // cut on leading jet pT
-                    if(pt1 >= 100. && pt1 < 200.){
+                    if(pt1 >= pTcut){
 
                     double dphi = fabs(eventPhi[leading]-eventPhi[subleading]);
 
@@ -254,7 +254,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
         if(leading >= 0 && subleading >= 0)
         {
             // cut on leading jet pT
-            if(pt1 >= 100. && pt1 < 200.)
+            if(pt1 >= pTcut)
             {
 
             double dphi = fabs(eventPhi[leading]-eventPhi[subleading]);
