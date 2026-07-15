@@ -1,6 +1,7 @@
 #include <TFile.h>
 #include <TTree.h>
 #include <TH1D.h>
+#include <TH2D.h>
 #include <TCanvas.h>
 #include <TMath.h>
 
@@ -82,6 +83,20 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
         "hDeltaEta",
         ";#Delta#eta;Events",
         100,0,3
+    );
+
+    TH2D *hPt1Pt2 = new TH2D(
+        "hPt1Pt2",
+        ";Leading jet p_{T} (GeV/c);Subleading jet p_{T} (GeV/c)",
+        100, 0, 300,
+        100, 0, 300
+    );
+
+    TH2D *hDeltaEtaDeltaPhi = new TH2D(
+        "hDeltaEtaDeltaPhi",
+        ";#Delta#eta;#Delta#phi (rad)",
+        100, 0, 3,
+        64, 0, TMath::Pi()
     );
 
     //==========================================================
@@ -191,6 +206,8 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
                     hDeltaPt->Fill(pt1 - pt2);
                     double deta = fabs(eventEta[leading] - eventEta[subleading]);
                     hDeltaEta->Fill(deta);
+                    hPt1Pt2->Fill(pt1, pt2);
+                    hDeltaEtaDeltaPhi->Fill(deta, dphi);
                     }
                 }
             }
@@ -263,6 +280,8 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
             hPt2->Fill(pt2);
             hDeltaPt->Fill(pt1 - pt2);
             hDeltaEta->Fill(deta);
+            hPt1Pt2->Fill(pt1, pt2);
+            hDeltaEtaDeltaPhi->Fill(deta, dphi);
             }
         }
     }
@@ -276,6 +295,8 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
     hPt2->Write();
     hDeltaPt->Write();
     hDeltaEta->Write();
+    hDeltaEtaDeltaPhi->Write();
+    hPt1Pt2->Write();
     out->Close();
 
     // Save figures
@@ -303,6 +324,14 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
     TCanvas *c5 = new TCanvas("c5","Delta eta",800,600);
     hDeltaEta->Draw();
     c5->SaveAs(Form("DeltaEta_R%d.pdf", R));
+
+    TCanvas *c6 = new TCanvas("c6","Delta eta vs Delta phi",800,600);
+    hDeltaEtaDeltaPhi->Draw("COLZ");
+    c6->SaveAs(Form("DeltaEtaDeltaPhi_R%d.pdf", R));
+
+    TCanvas *c7 = new TCanvas("c7","Leading vs Subleading jet pT",800,600);
+    hPt1Pt2->Draw("COLZ");
+    c7->SaveAs(Form("Pt1Pt2_R%d.pdf", R));
 
     cout << "Done." << endl;
 }
