@@ -4,10 +4,14 @@
 #include <TH1F.h>
 #include <TLegend.h>
 #include <TROOT.h>
+#include <TSystem.h>
+#include <TMath.h>
 
 void pTdistri(const char *filename="MergedAnalysisJets.root")
 {
     TFile *file = TFile::Open(filename);
+
+    gSystem->mkdir("JetDistributions", kTRUE);
 
     if(!file || file->IsZombie())
     {
@@ -28,9 +32,9 @@ void pTdistri(const char *filename="MergedAnalysisJets.root")
 
     for(int i=0;i<3;i++)
     {
-        // pT distribution for reconstruct and truth jets
         int R = radii[i];
 
+        // pT distribution for reconstruct and truth jets
         TCanvas *c = new TCanvas(Form("c_R%d",R),
                                  Form("R=%d",R),
                                  800,600);
@@ -67,7 +71,7 @@ void pTdistri(const char *filename="MergedAnalysisJets.root")
         leg->AddEntry(hTruth,"Truth jets","l");
         leg->Draw();
 
-        c->SaveAs(Form("RecoVsTruthJetPt_R%d.pdf",R));
+        c->SaveAs(Form("JetDistributions/RecoVsTruthJetPt_R%d.pdf",R));
 
         // eta distribution for reconstruct and truth jets
         TCanvas *cEta = new TCanvas(Form("cEta_R%d",R),
@@ -104,7 +108,47 @@ void pTdistri(const char *filename="MergedAnalysisJets.root")
         legEta->AddEntry(hTruthEta,"Truth jets","l");
         legEta->Draw();
 
-        cEta->SaveAs(Form("RecoVsTruthJetEta_R%d.pdf",R));
+        cEta->SaveAs(Form("JetDistributions/RecoVsTruthJetEta_R%d.pdf",R));
+
+        // energy distribution for reconstruct and truth jets
+
+        TCanvas *cEnergy = new TCanvas(Form("cEnergy_R%d",R),
+                         Form("R=%d",R),
+                         800,600);
+
+        TH1F *hRecoEnergy = new TH1F(Form("hRecoEnergy_R%d",R),
+                       Form("R=%d;Jet Energy (GeV);Entries",R),
+                       220,0,220);
+
+        TH1F *hTruthEnergy = new TH1F(Form("hTruthEnergy_R%d",R),
+                        Form("R=%d;Jet Energy (GeV);Entries",R),
+                        220,0,220);
+
+        jetTree->Draw(Form("jetE>>hRecoEnergy_R%d",R),
+              Form("jetR==%d",R),
+              "goff");
+
+        truthjetTree->Draw(Form("truthjetE>>hTruthEnergy_R%d",R),
+                   Form("truthjetR==%d",R),
+                   "goff");
+
+        hRecoEnergy->SetLineColor(kBlue);
+        hRecoEnergy->SetLineWidth(2);
+
+        hTruthEnergy->SetLineColor(kRed);
+        hTruthEnergy->SetLineWidth(2);
+
+        hRecoEnergy->Draw("hist");
+        hTruthEnergy->Draw("hist same");
+
+        gPad->SetLogy();
+
+        TLegend *legEnergy = new TLegend(0.60,0.75,0.88,0.88);
+        legEnergy->AddEntry(hRecoEnergy,"Reco jets","l");
+        legEnergy->AddEntry(hTruthEnergy,"Truth jets","l");
+        legEnergy->Draw();
+
+        cEnergy->SaveAs(Form("JetDistributions/RecoVsTruthJetEnergy_R%d.pdf",R));
 
         // phi distribution for reconstruct and truth jets
         TCanvas *cPhi = new TCanvas(Form("cPhi_R%d",R),
@@ -141,7 +185,7 @@ void pTdistri(const char *filename="MergedAnalysisJets.root")
         legPhi->AddEntry(hTruthPhi,"Truth jets","l");
         legPhi->Draw();
 
-        cPhi->SaveAs(Form("RecoVsTruthJetPhi_R%d.pdf",R));
+        cPhi->SaveAs(Form("JetDistributions/RecoVsTruthJetPhi_R%d.pdf",R));
     }
 
     file->Close();
