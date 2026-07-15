@@ -1,3 +1,7 @@
+# =========================
+# User / system files
+# =========================
+
 .local/
 .cache/
 .config/
@@ -10,24 +14,54 @@
 .root_hist
 .lesshst
 .Xauthority
-.cmake/
-snap/
+
+.ssh/
+.gitconfig
+.vscode/
+
+# =========================
+# ALICE / AliRoot local environment
+# =========================
+
 alice/
 alidist/
 bin/
 
-simtest/*.root
-simtest/*.log
-simtest/*.dat
-simtest/GRP/
-simtest/grpdump.sh
-simtest/validation_error.message
-!simtest/analysisJets.root
-!simtest/focalClusters.root
+# =========================
+# Simulation outputs
+# =========================
+
+*.root
+*.log
+*.dat
+*.pdf
+*.png
+
+# =========================
+# Generated directories
+# =========================
+
+GRP/
+figs/
+build/
+
+# =========================
+# ROOT ACLiC generated files
+# =========================
+
+*.so
+*.d
+*.pcm
+
+# =========================
+# Temporary validation files
+# =========================
+
+grpdump.sh
+validation_error.message
+
+# =========================
+# Other local folders
+# =========================
+
 focalJetAnalysis/.git
-.ssh/
-.gitconfig
-.vscode/
-simtest/build/
-simtest/*.pdf
-simtest/*.png
