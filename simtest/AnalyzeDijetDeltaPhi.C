@@ -138,6 +138,11 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
 
                 if(leading >= 0 && subleading >= 0)
                 {
+
+                    // cut on leading jet pT
+                    if(pt1 < 100. || pt1 >= 200.)
+                        continue;
+
                     double dphi = fabs(eventPhi[leading]-eventPhi[subleading]);
 
                     if(dphi > TMath::Pi())
@@ -199,6 +204,10 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
 
         if(leading >= 0 && subleading >= 0)
         {
+            // cut on leading jet pT
+            if(pt1 < 100. || pt1 >= 200.)
+                continue;
+
             double dphi = fabs(eventPhi[leading]-eventPhi[subleading]);
 
             if(dphi > TMath::Pi())
