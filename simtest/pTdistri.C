@@ -76,11 +76,11 @@ void pTdistri(const char *filename="MergedAnalysisJets.root")
 
         TH1F *hRecoEta = new TH1F(Form("hRecoEta_R%d",R),
                           Form("R=%d;Jet #eta;Entries",R),
-                          100,-1.5,1.5);
+                          100,-5.5,5.5);
 
         TH1F *hTruthEta = new TH1F(Form("hTruthEta_R%d",R),
                            Form("R=%d;Jet #eta;Entries",R),
-                           100,-1.5,1.5);
+                           100,-5.5,5.5);
 
         jetTree->Draw(Form("jetEta>>hRecoEta_R%d",R),
               Form("jetR==%d",R),
