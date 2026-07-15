@@ -60,6 +60,24 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
         TMath::Pi()
     );
 
+    TH1D *hPt1 = new TH1D(
+        "hPt1",
+        ";Leading jet p_{T} (GeV/c);Events",
+        100,0,300
+    );
+
+    TH1D *hPt2 = new TH1D(
+        "hPt2",
+        ";Subleading jet p_{T} (GeV/c);Events",
+        100,0,300
+    );
+
+    TH1D *hDeltaPt = new TH1D(
+        "hDeltaPt",
+        ";p_{T1}-p_{T2} (GeV/c);Events",
+        100,0,200
+    );
+
     //==========================================================
     // Variables
     //==========================================================
@@ -161,6 +179,9 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
                     }*/
 
                     hDeltaPhi->Fill(dphi);
+                    hPt1->Fill(pt1);
+                    hPt2->Fill(pt2);
+                    hDeltaPt->Fill(pt1 - pt2);
                 }
             }
 
@@ -226,22 +247,43 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
             }*/
 
             hDeltaPhi->Fill(dphi);
+            hPt1->Fill(pt1);
+            hPt2->Fill(pt2);
+            hDeltaPt->Fill(pt1 - pt2);
         }
     }
 
-    // Save output
+    // Save in root file
 
-    TFile *out = new TFile(Form("DijetDeltaPhi_R%d.root", R), "RECREATE");
+    TFile *out = new TFile(Form("DijetDistributions_R%d.root",R),"RECREATE");
+
     hDeltaPhi->Write();
+    hPt1->Write();
+    hPt2->Write();
+    hDeltaPt->Write();
+
     out->Close();
 
-    // Draw
-
-    TCanvas *c = new TCanvas("c","DeltaPhi",800,600);
-
+    // Save figures
+    // Delta Phi distribution
+    TCanvas *c1 = new TCanvas("c1","DeltaPhi",800,600);
     hDeltaPhi->Draw();
+    c1->SaveAs(Form("DeltaPhi_R%d.pdf", R));
 
-    c->SaveAs(Form("DeltaPhi_R%d.pdf", R));
+    // Leading jet pT distribution
+    TCanvas *c2 = new TCanvas("c2","Leading jet pT",800,600);
+    hPt1->Draw();
+    c2->SaveAs(Form("Pt1_R%d.pdf", R));
 
-    cout << "Done." << endl;
+    // Subleading jet pT distribution
+    TCanvas *c3 = new TCanvas("c3","Subleading jet pT",800,600);
+    hPt2->Draw();
+    c3->SaveAs(Form("Pt2_R%d.pdf", R));
+
+    // Delta pT distribution
+    TCanvas *c4 = new TCanvas("c4","Delta pT",800,600);
+    hDeltaPt->Draw();
+    c4->SaveAs(Form("DeltaPt_R%d.pdf", R));
+
+cout << "Done." << endl;
 }
