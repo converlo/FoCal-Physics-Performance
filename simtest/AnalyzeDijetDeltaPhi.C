@@ -78,12 +78,19 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
         100,0,200
     );
 
+    TH1D *hDeltaEta = new TH1D(
+        "hDeltaEta",
+        ";#Delta#eta;Events",
+        100,0,3
+    );
+
     //==========================================================
     // Variables
     //==========================================================
 
     vector<float> eventPt;
     vector<float> eventPhi;
+    vector<float> eventEta;
 
     Long64_t nEntries = jetTree->GetEntries();
 
@@ -126,6 +133,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
         {
             eventPt.push_back(jetpT);
             eventPhi.push_back(jetPhi);
+            eventEta.push_back(jetEta);
         }
         else
         {
@@ -158,8 +166,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
                 {
 
                     // cut on leading jet pT
-                    if(pt1 < 100. || pt1 >= 200.)
-                        continue;
+                    if(pt1 >= 100. && pt1 < 200.){
 
                     double dphi = fabs(eventPhi[leading]-eventPhi[subleading]);
 
@@ -182,15 +189,19 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
                     hPt1->Fill(pt1);
                     hPt2->Fill(pt2);
                     hDeltaPt->Fill(pt1 - pt2);
+                    double deta = fabs(eventEta[leading] - eventEta[subleading]);
+                    hDeltaEta->Fill(deta);
+                    }
                 }
             }
 
             eventPt.clear();
             eventPhi.clear();
-
+            eventEta.clear();
             currentEvent = ievt;
             eventPt.push_back(jetpT);
             eventPhi.push_back(jetPhi);
+            eventEta.push_back(jetEta);
         }
     }
 
@@ -226,14 +237,15 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
         if(leading >= 0 && subleading >= 0)
         {
             // cut on leading jet pT
-            if(pt1 < 100. || pt1 >= 200.)
-                continue;
+            if(pt1 >= 100. && pt1 < 200.)
+            {
 
             double dphi = fabs(eventPhi[leading]-eventPhi[subleading]);
 
             if(dphi > TMath::Pi())
                 dphi = 2.*TMath::Pi()-dphi;
 
+            double deta = fabs(eventEta[leading] - eventEta[subleading]);
             /*if(currentEvent < 10)
             {
                 cout << "Event " << currentEvent
@@ -250,6 +262,8 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
             hPt1->Fill(pt1);
             hPt2->Fill(pt2);
             hDeltaPt->Fill(pt1 - pt2);
+            hDeltaEta->Fill(deta);
+            }
         }
     }
 
@@ -261,7 +275,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
     hPt1->Write();
     hPt2->Write();
     hDeltaPt->Write();
-
+    hDeltaEta->Write();
     out->Close();
 
     // Save figures
@@ -285,5 +299,10 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
     hDeltaPt->Draw();
     c4->SaveAs(Form("DeltaPt_R%d.pdf", R));
 
-cout << "Done." << endl;
+    // Delta eta distribution
+    TCanvas *c5 = new TCanvas("c5","Delta eta",800,600);
+    hDeltaEta->Draw();
+    c5->SaveAs(Form("DeltaEta_R%d.pdf", R));
+
+    cout << "Done." << endl;
 }
