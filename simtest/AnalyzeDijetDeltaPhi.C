@@ -61,20 +61,20 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
         TMath::Pi()
     );
 
-    TH1D *hPt1 = new TH1D(
-        "hPt1",
+    TH1D *hpT1 = new TH1D(
+        "hpT1",
         ";Leading jet p_{T} (GeV/c);Events",
         100,0,300
     );
 
-    TH1D *hPt2 = new TH1D(
-        "hPt2",
+    TH1D *hpT2 = new TH1D(
+        "hpT2",
         ";Subleading jet p_{T} (GeV/c);Events",
         100,0,300
     );
 
-    TH1D *hDeltaPt = new TH1D(
-        "hDeltaPt",
+    TH1D *hDeltapT = new TH1D(
+        "hDeltapT",
         ";p_{T1}-p_{T2} (GeV/c);Events",
         100,0,200
     );
@@ -85,8 +85,8 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
         100,0,3
     );
 
-    TH2D *hPt1Pt2 = new TH2D(
-        "hPt1Pt2",
+    TH2D *hpT1pT2 = new TH2D(
+        "hpT1pT2",
         ";Leading jet p_{T} (GeV/c);Subleading jet p_{T} (GeV/c)",
         100, 0, 300,
         100, 0, 300
@@ -103,7 +103,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
     // Variables
     //==========================================================
 
-    vector<float> eventPt;
+    vector<float> eventpT;
     vector<float> eventPhi;
     vector<float> eventEta;
 
@@ -146,13 +146,13 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
             
         if(ievt == currentEvent)
         {
-            eventPt.push_back(jetpT);
+            eventpT.push_back(jetpT);
             eventPhi.push_back(jetPhi);
             eventEta.push_back(jetEta);
         }
         else
         {
-            if(eventPt.size() >= 2)
+            if(eventpT.size() >= 2)
             {
                 int leading = -1;
                 int subleading = -1;
@@ -160,19 +160,19 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
                 float pt1 = -1.;
                 float pt2 = -1.;
 
-                for(unsigned int j=0;j<eventPt.size();j++)
+                for(unsigned int j=0;j<eventpT.size();j++)
                 {
-                    if(eventPt[j] > pt1)
+                    if(eventpT[j] > pt1)
                     {
                         pt2 = pt1;
                         subleading = leading;
 
-                        pt1 = eventPt[j];
+                        pt1 = eventpT[j];
                         leading = j;
                     }
-                    else if(eventPt[j] > pt2)
+                    else if(eventpT[j] > pt2)
                     {
-                        pt2 = eventPt[j];
+                        pt2 = eventpT[j];
                         subleading = j;
                     }
                 }
@@ -191,7 +191,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
                     /*if(currentEvent < 10)
                     {
                         cout << "Event " << currentEvent
-                             << "  Njets = " << eventPt.size()
+                             << "  Njets = " << eventpT.size()
                              << "  lead pT = " << pt1
                              << "  sublead pT = " << pt2
                              << "  phi1 = " << eventPhi[leading]
@@ -201,22 +201,22 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
                     }*/
 
                     hDeltaPhi->Fill(dphi);
-                    hPt1->Fill(pt1);
-                    hPt2->Fill(pt2);
-                    hDeltaPt->Fill(pt1 - pt2);
+                    hpT1->Fill(pt1);
+                    hpT2->Fill(pt2);
+                    hDeltapT->Fill(pt1 - pt2);
                     double deta = fabs(eventEta[leading] - eventEta[subleading]);
                     hDeltaEta->Fill(deta);
-                    hPt1Pt2->Fill(pt1, pt2);
+                    hpT1pT2->Fill(pt1, pt2);
                     hDeltaEtaDeltaPhi->Fill(deta, dphi);
                     }
                 }
             }
 
-            eventPt.clear();
+            eventpT.clear();
             eventPhi.clear();
             eventEta.clear();
             currentEvent = ievt;
-            eventPt.push_back(jetpT);
+            eventpT.push_back(jetpT);
             eventPhi.push_back(jetPhi);
             eventEta.push_back(jetEta);
         }
@@ -226,7 +226,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
     // Last event
     //==========================================================
 
-    if(eventPt.size() >= 2)
+    if(eventpT.size() >= 2)
     {
         int leading = -1;
         int subleading = -1;
@@ -234,19 +234,19 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
         float pt1 = -1.;
         float pt2 = -1.;
 
-        for(unsigned int j=0;j<eventPt.size();j++)
+        for(unsigned int j=0;j<eventpT.size();j++)
         {
-            if(eventPt[j] > pt1)
+            if(eventpT[j] > pt1)
             {
                 pt2 = pt1;
                 subleading = leading;
 
-                pt1 = eventPt[j];
+                pt1 = eventpT[j];
                 leading = j;
             }
-            else if(eventPt[j] > pt2)
+            else if(eventpT[j] > pt2)
             {
-                pt2 = eventPt[j];
+                pt2 = eventpT[j];
                 subleading = j;
             }
         }
@@ -266,7 +266,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
             /*if(currentEvent < 10)
             {
                 cout << "Event " << currentEvent
-                     << "  Njets = " << eventPt.size()
+                     << "  Njets = " << eventpT.size()
                      << "  lead pT = " << pt1
                      << "  sublead pT = " << pt2
                      << "  phi1 = " << eventPhi[leading]
@@ -276,11 +276,11 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
             }*/
 
             hDeltaPhi->Fill(dphi);
-            hPt1->Fill(pt1);
-            hPt2->Fill(pt2);
-            hDeltaPt->Fill(pt1 - pt2);
+            hpT1->Fill(pt1);
+            hpT2->Fill(pt2);
+            hDeltapT->Fill(pt1 - pt2);
             hDeltaEta->Fill(deta);
-            hPt1Pt2->Fill(pt1, pt2);
+            hpT1pT2->Fill(pt1, pt2);
             hDeltaEtaDeltaPhi->Fill(deta, dphi);
             }
         }
@@ -291,12 +291,12 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
     TFile *out = new TFile(Form("DijetDistributions_R%d.root",R),"RECREATE");
 
     hDeltaPhi->Write();
-    hPt1->Write();
-    hPt2->Write();
-    hDeltaPt->Write();
+    hpT1->Write();
+    hpT2->Write();
+    hDeltapT->Write();
     hDeltaEta->Write();
     hDeltaEtaDeltaPhi->Write();
-    hPt1Pt2->Write();
+    hpT1pT2->Write();
     out->Close();
 
     // Save figures
@@ -307,18 +307,18 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
 
     // Leading jet pT distribution
     TCanvas *c2 = new TCanvas("c2","Leading jet pT",800,600);
-    hPt1->Draw();
-    c2->SaveAs(Form("Pt1_R%d.pdf", R));
+    hpT1->Draw();
+    c2->SaveAs(Form("pT1_R%d.pdf", R));
 
     // Subleading jet pT distribution
     TCanvas *c3 = new TCanvas("c3","Subleading jet pT",800,600);
-    hPt2->Draw();
-    c3->SaveAs(Form("Pt2_R%d.pdf", R));
+    hpT2->Draw();
+    c3->SaveAs(Form("pT2_R%d.pdf", R));
 
     // Delta pT distribution
     TCanvas *c4 = new TCanvas("c4","Delta pT",800,600);
-    hDeltaPt->Draw();
-    c4->SaveAs(Form("DeltaPt_R%d.pdf", R));
+    hDeltapT->Draw();
+    c4->SaveAs(Form("DeltapT_R%d.pdf", R));
 
     // Delta eta distribution
     TCanvas *c5 = new TCanvas("c5","Delta eta",800,600);
@@ -330,8 +330,8 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
     c6->SaveAs(Form("DeltaEtaDeltaPhi_R%d.pdf", R));
 
     TCanvas *c7 = new TCanvas("c7","Leading vs Subleading jet pT",800,600);
-    hPt1Pt2->Draw("COLZ");
-    c7->SaveAs(Form("Pt1Pt2_R%d.pdf", R));
+    hpT1pT2->Draw("COLZ");
+    c7->SaveAs(Form("pT1pT2_R%d.pdf", R));
 
     cout << "Done." << endl;
 }
