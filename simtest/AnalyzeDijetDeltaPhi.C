@@ -58,7 +58,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
         ";#Delta#phi (rad);Events",
         64,
         0,
-        TMath::Pi()
+        2*TMath::Pi()
     );
 
     TH1D *hpT1 = new TH1D(
@@ -96,7 +96,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
         "hDeltaEtaDeltaPhi",
         ";#Delta#eta;#Delta#phi (rad)",
         100, 0, 3,
-        64, 0, TMath::Pi()
+        64, 0, 2*TMath::Pi()
     );
 
     //==========================================================
