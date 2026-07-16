@@ -7,7 +7,7 @@
 #include <TSystem.h>
 #include <TMath.h>
 
-void pTdistri(const char *filename="MergedAnalysisJets.root")
+void TruthVSReco_distribution(const char *filename="MergedAnalysisJets.root")
 {
     TFile *file = TFile::Open(filename);
 
