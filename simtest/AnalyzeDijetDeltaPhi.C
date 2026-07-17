@@ -114,8 +114,6 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
     cout << "Number of jets = " << nEntries << endl;
 
 
-
-
     Int_t currentEvent = -1;
 
     // Cherche le premier événement ayant le rayon demandé
@@ -187,7 +185,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
 
                     double dphi = fabs(eventPhi[leading]-eventPhi[subleading]);
 
-                    /*if(currentEvent < 10)
+                    if(currentEvent < 10)
                     {
                         cout << "Event " << currentEvent
                              << "  Njets = " << eventpT.size()
@@ -197,7 +195,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
                              << "  phi2 = " << eventPhi[subleading]
                              << "  dphi = " << dphi
                              << endl;
-                    }*/
+                    }
 
                     hDeltaPhi->Fill(dphi);
                     hpT1->Fill(pt1);
