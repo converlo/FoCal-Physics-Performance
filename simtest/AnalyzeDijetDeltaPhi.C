@@ -187,9 +187,6 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
 
                     double dphi = fabs(eventPhi[leading]-eventPhi[subleading]);
 
-                    if(dphi > TMath::Pi())
-                        dphi = 2.*TMath::Pi()-dphi;
-
                     /*if(currentEvent < 10)
                     {
                         cout << "Event " << currentEvent
@@ -260,9 +257,6 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
             {
 
             double dphi = fabs(eventPhi[leading]-eventPhi[subleading]);
-
-            if(dphi > TMath::Pi())
-                dphi = 2.*TMath::Pi()-dphi;
 
             double deta = fabs(eventEta[leading] - eventEta[subleading]);
             /*if(currentEvent < 10)
