@@ -305,35 +305,35 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root", const 
     // Delta Phi distribution
     TCanvas *c1 = new TCanvas("c1","DeltaPhi",800,600);
     hDeltaPhi->Draw();
-    c1->SaveAs(Form("DijetAnalysis/DeltaPhi_R%d.pdf", R));
+    c1->SaveAs(Form("DijetAnalysis/DeltaPhi_R%d_cut%d.pdf", R, pTcut));
 
     // Leading jet pT distribution
     TCanvas *c2 = new TCanvas("c2","Leading jet pT",800,600);
     hpT1->Draw();
-    c2->SaveAs(Form("DijetAnalysis/pT1_R%d.pdf", R));
+    c2->SaveAs(Form("DijetAnalysis/pT1_R%d_cut%d.pdf", R, pTcut));
 
     // Subleading jet pT distribution
     TCanvas *c3 = new TCanvas("c3","Subleading jet pT",800,600);
     hpT2->Draw();
-    c3->SaveAs(Form("DijetAnalysis/pT2_R%d.pdf", R));
+    c3->SaveAs(Form("DijetAnalysis/pT2_R%d_cut%d.pdf", R, pTcut));
 
     // Delta pT distribution
     TCanvas *c4 = new TCanvas("c4","Delta pT",800,600);
     hDeltapT->Draw();
-    c4->SaveAs(Form("DijetAnalysis/DeltapT_R%d.pdf", R));
+    c4->SaveAs(Form("DijetAnalysis/DeltapT_R%d_cut%d.pdf", R, pTcut));
 
     // Delta eta distribution
     TCanvas *c5 = new TCanvas("c5","Delta eta",800,600);
     hDeltaEta->Draw();
-    c5->SaveAs(Form("DijetAnalysis/DeltaEta_R%d.pdf", R));
+    c5->SaveAs(Form("DijetAnalysis/DeltaEta_R%d_cut%d.pdf", R, pTcut));
 
     TCanvas *c6 = new TCanvas("c6","Delta eta vs Delta phi",800,600);
     hDeltaEtaDeltaPhi->Draw("COLZ");
-    c6->SaveAs(Form("DijetAnalysis/DeltaEtaDeltaPhi_R%d.pdf", R));
+    c6->SaveAs(Form("DijetAnalysis/DeltaEtaDeltaPhi_R%d_cut%d.pdf", R, pTcut));
 
     TCanvas *c7 = new TCanvas("c7","Leading vs Subleading jet pT",800,600);
     hpT1pT2->Draw("COLZ");
-    c7->SaveAs(Form("DijetAnalysis/pT1pT2_R%d.pdf", R));
+    c7->SaveAs(Form("DijetAnalysis/pT1pT2_R%d_cut%d.pdf", R, pTcut));
 
     cout << "Done." << endl;
 }
