@@ -91,7 +91,7 @@ void AnalyzeDijetDeltaPhi(const char *filename="MergedAnalysisJets.root",
 
     TH2D *hpT1pT2 = new TH2D("hpT1pT2",
         ";Leading jet p_{T} (GeV/c);Subleading jet p_{T} (GeV/c)",
-        100, 0, 300, 100, 0, 300);
+        100, 0, 100, 150, 0, 100);
 
     TH2D *hDeltaEtaDeltaPhi = new TH2D("hDeltaEtaDeltaPhi",
         ";#Delta#eta;#Delta#phi (rad)",
