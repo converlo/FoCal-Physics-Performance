@@ -184,6 +184,10 @@ void TruthVSReco_distribution(const char *filename="MergedAnalysisJets.root")
         hTruthPhi->SetLineColor(kRed);
         hTruthPhi->SetLineWidth(2);
 
+        double maxPhi = TMath::Max(hRecoPhi->GetMaximum(), hTruthPhi->GetMaximum());
+        hRecoPhi->SetMinimum(0);
+        hRecoPhi->SetMaximum(1.2 * maxPhi);   // 20% de marge au-dessus
+
         hRecoPhi->Draw("hist");
         hTruthPhi->Draw("hist same");
 
