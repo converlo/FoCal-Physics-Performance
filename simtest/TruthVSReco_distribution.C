@@ -34,6 +34,7 @@ void TruthVSReco_distribution(const char *filename="MergedAnalysisJets.root")
     {
         int R = radii[i];
 
+
         // pT distribution for reconstruct and truth jets
         TCanvas *c = new TCanvas(Form("c_R%d",R),
                                  Form("R=%d",R),
@@ -73,6 +74,7 @@ void TruthVSReco_distribution(const char *filename="MergedAnalysisJets.root")
 
         c->SaveAs(Form("JetDistributions/RecoVsTruthJetPt_R%d.pdf",R));
 
+
         // eta distribution for reconstruct and truth jets
         TCanvas *cEta = new TCanvas(Form("cEta_R%d",R),
                             Form("Eta R=%d",R),
@@ -109,6 +111,8 @@ void TruthVSReco_distribution(const char *filename="MergedAnalysisJets.root")
         legEta->Draw();
 
         cEta->SaveAs(Form("JetDistributions/RecoVsTruthJetEta_R%d.pdf",R));
+
+
 
         // energy distribution for reconstruct and truth jets
 
@@ -150,18 +154,21 @@ void TruthVSReco_distribution(const char *filename="MergedAnalysisJets.root")
 
         cEnergy->SaveAs(Form("JetDistributions/RecoVsTruthJetEnergy_R%d.pdf",R));
 
+
+
         // phi distribution for reconstruct and truth jets
+
         TCanvas *cPhi = new TCanvas(Form("cPhi_R%d",R),
                             Form("Phi R=%d",R),
                             800,600);
 
         TH1F *hRecoPhi = new TH1F(Form("hRecoPhi_R%d",R),
                           Form("R=%d;Jet #phi (rad);Entries",R),
-                          64,-TMath::Pi(),TMath::Pi());
+                          64,0,2*TMath::Pi());
 
         TH1F *hTruthPhi = new TH1F(Form("hTruthPhi_R%d",R),
                            Form("R=%d;Jet #phi (rad);Entries",R),
-                           64,-TMath::Pi(),TMath::Pi());
+                           64,0,2*TMath::Pi());
 
         jetTree->Draw(Form("jetPhi>>hRecoPhi_R%d",R),
               Form("jetR==%d",R),
